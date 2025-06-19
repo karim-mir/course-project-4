@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from mailings.models import Mailings
-from users.models import MailingRecipient
+from mailings.models import Mailings, MailingRecipient
 
 NEWSLETTERS_STATUS_CHOICES = [
     ('Создана', 'Создана'),
@@ -22,7 +21,7 @@ class Newsletters(models.Model):
         help_text="Выберите статус рассылки"
     )
     message = models.ForeignKey(Mailings, on_delete=models.CASCADE)
-    # recipient = models.ManyToManyField(MailingRecipient)
+    recipient = models.ManyToManyField(MailingRecipient)
 
     class Meta:
         verbose_name = "Рассылка"
