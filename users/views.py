@@ -58,7 +58,7 @@ def register(request):
 
             # Отправляем письмо с ссылкой на подтверждение
             confirm_url = request.build_absolute_uri(
-                reverse("confirm_email", args=[str(confirmation.token)])
+                reverse("users:confirm_email", args=[str(confirmation.token)])
             )
             send_mail(
                 "Подтверждение регистрации",
@@ -73,6 +73,10 @@ def register(request):
     else:
         form = CustomUserRegistrationForm()
     return render(request, "users/register.html", {"form": form})
+
+
+def registration_pending(request):
+    return render(request, "users/registration_pending.html")
 
 
 def user_login(request):
@@ -90,6 +94,10 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("users:login")
+
+
+def user_profile(request):
+    return render(request, "users/profile.html")
 
 
 def home(request):

@@ -13,11 +13,21 @@
 
 <header data-bs-theme="dark">
     {% include 'users/includes/inc_menu.html' %}
+    <div class="user-info text-end p-2">
+        {% if request.user.is_authenticated %}
+            <p class="mb-0">Здравствуйте, {{ request.user.full_name|default:request.user.username }}!</p>
+            <a href="{% url 'users:logout' %}">Выйти</a>
+        {% else %}
+            <p class="mb-0">Вы не вошли в систему.</p>
+            <a href="{% url 'users:login' %}">Войти</a>
+        {% endif %}
+    </div>
 </header>
 
-{% block base_content %}
-
-{% endblock %}
+<main class="container mt-4">
+    {% block base_content %}
+    {% endblock %}
+</main>
 
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
