@@ -1,0 +1,27 @@
+<nav class="nav-sidebar">
+    <div class="menu-title">
+        <i class="fas fa-bars"></i> Меню
+    </div>
+    <div class="nav flex-column">
+        <a class="nav-link active" href="{% url 'users:home' %}">Главная</a>
+        <!-- Раздел для управления получателями -->
+        <a class="nav-link" href="{% url 'users:recipients_list' %}">Получатели</a>
+        <!-- Раздел для управления сообщениями -->
+        <a class="nav-link" href="{% url 'mailings:mailings_list' %}">Сообщения</a>
+    </div>
+    <div class="dropdown mt-auto">
+        <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Пользователь
+        </button>
+        <div class="dropdown-menu" aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="#">Профиль</a>
+
+        </div>
+    </div>
+</nav>
+
+<!-- Подключение скриптов -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

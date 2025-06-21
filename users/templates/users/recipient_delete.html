@@ -1,0 +1,14 @@
+{% extends 'users/home.html' %}
+{% load my_tags %}
+
+{% block base_content %}
+<div class="container mt-5 text-center">
+    <h1>Удалить получателя?</h1>
+    <p>Вы уверены, что хотите удалить "{{ user.full_name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a href="{% url 'users:recipients_list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

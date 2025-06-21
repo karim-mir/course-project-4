@@ -1,0 +1,21 @@
+{% extends 'users/home.html' %}
+{% load my_tags %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h1>Детали получателя</h1>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>ФИО:</strong> {{ user.full_name }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+        <li class="list-group-item"><strong>Комментарий:</strong> {{ user.comment|default:"-" }}</li>
+        {% if user.token %}
+        <li class="list-group-item"><strong>Token:</strong> {{ user.token }}</li>
+        {% endif %}
+    </ul>
+    <div class="mt-3">
+        <a href="{% url 'users:recipient_edit' user.pk %}" class="btn btn-primary">Редактировать</a>
+        <a href="{% url 'users:recipient_delete' user.pk %}" class="btn btn-danger">Удалить</a>
+        <a href="{% url 'users:recipients_list' %}" class="btn btn-secondary">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}

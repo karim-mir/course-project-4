@@ -1,0 +1,12 @@
+{% extends "users/home.html" %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p>{{ object.content }}</p>
+
+<a href="{% url 'mailings:mailings_edit' object.pk %}">Редактировать</a> |
+<a href="{% url 'mailings:mailings_delete' object.pk %}">Удалить</a> |
+<a href="{% url 'mailings:mailings_list' %}">К списку сообщений</a>
+<a href="{% url 'mailings:start_mailing' object.id %}">Запустить рассылку</a>
+
+{% endblock %}

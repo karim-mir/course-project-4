@@ -1,0 +1,47 @@
+{% extends 'users/home.html' %}
+{% load my_tags %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1>Получатели рассылки</h1>
+        <p>Управление списком получателей для рассылок.</p>
+    </div>
+    <div class="row">
+        {% for user in users %}
+        <div class="col-sm-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ user.full_name }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+                    <p class="card-text"><strong>Комментарий:</strong> {{ user.comment|default:"-" }}</p>
+                    {% if user.token %}
+                        <p class="card-text"><strong>Token:</strong> {{ user.token }}</p>
+                    {% endif %}
+                    <div class="mt-auto d-flex justify-content-between">
+                        <!-- Кнопки редактирования и удаления -->
+                        {% if perms.users.change_mailingrecipient or user == request.user %}
+                        <a class="btn btn-primary btn-sm" href="{% url 'users:recipient_edit' user.pk %}">Редактировать</a>
+                        {% endif %}
+                        {% if perms.users.delete_mailingrecipient or user == request.user %}
+                        <a class="btn btn-danger btn-sm" href="{% url 'users:recipient_delete' user.pk %}">Удалить</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>Нет получателей.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Кнопка добавления нового получателя -->
+    {% if perms.users.add_mailingrecipient or request.user.is_authenticated %}
+    <div class="fixed-bottom d-flex justify-content-center mb-3">
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'users:recipient_add' %}">Добавить получателя</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
