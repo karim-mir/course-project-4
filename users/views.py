@@ -1,34 +1,35 @@
-from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
 from django.db.models import Count, Q
 
-from mailings.models import MailingRecipient
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
+from django.core.mail import send_mail
+
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from mailings.models import MailingRecipient
 from users.forms import CustomUserRegistrationForm, MailingRecipientForm
 from users.models import EmailConfirmation
 
-
-
-## Получение статистики по пользователю
-#recipients_stats = MailingRecipient.objects.annotate(
-#    total_messages=Count("messages_sent"),
-#    success_count=Count("messages_sent", filter=Q(messages_sent__status="success")),
-#    failed_count=Count("messages_sent", filter=Q(messages_sent__status="failed"))
-#)
-#
-#for recipient in recipients_stats:
-#    print(f"{recipient.email}:")
-#    print(f"  Всего сообщений: {recipient.total_messages}")
-#    print(f"  Успешных: {recipient.success_count}")
-#    print(f"  Неудачных: {recipient.failed_count}")
+# Получение статистики по пользователю
+@login_required
+def recipients_stats_view(request):
+    recipients_stats = MailingRecipient.objects.annotate(
+        total_messages=Count("messages_sent"),
+        success_count=Count("messages_sent", filter=Q(messages_sent__status="success")),
+        failed_count=Count("messages_sent", filter=Q(messages_sent__status="failed"))
+    )
+    return render(request, "users/recipients_stats.html", {"recipients_stats": recipients_stats})
 
 
 def confirm_email(request, token):

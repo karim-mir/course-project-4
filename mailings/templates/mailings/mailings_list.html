@@ -5,24 +5,28 @@
 <a href="{% url 'mailings:mailings_add' %}">Добавить сообщение</a>
 <table>
     <thead>
-        <tr>
-            <th>Заголовок</th>
-            <th>Действия</th>
-        </tr>
+    <tr>
+        <th>Заголовок</th>
+        <th>Действия</th>
+    </tr>
     </thead>
     <tbody>
-        {% for message in messages %}
-        <tr>
-            <td>{{ message.title }}</td>
-            <td>
-                <a href="{% url 'mailings:mailings_detail' message.pk %}">Просмотр</a> |
-                <a href="{% url 'mailings:mailings_edit' message.pk %}">Редактировать</a> |
-                <a href="{% url 'mailings:mailings_delete' message.pk %}">Удалить</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="3">Нет сообщений</td></tr>
-        {% endfor %}
+    {% for message in messages %}
+    <tr>
+        <td>{{ message.title }}</td>
+        <td>
+            <a href="{% url 'mailings:mailings_detail' message.pk %}">Просмотр</a>
+            {% if message.owner == request.user %}
+            | <a href="{% url 'mailings:mailings_edit' message.pk %}">Редактировать</a>
+            | <a href="{% url 'mailings:mailings_delete' message.pk %}">Удалить</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">Нет сообщений</td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 {% endblock %}

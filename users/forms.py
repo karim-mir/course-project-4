@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 from users.models import CustomUser
 
@@ -15,7 +16,7 @@ class MailingRecipientForm(forms.ModelForm):
         }
 
 
-class CustomUserRegistrationForm(forms.ModelForm):
+class CustomUserRegistrationForm(UserCreationForm):
     password1 = forms.CharField(label="Пароль", widget=forms.PasswordInput)
     password2 = forms.CharField(
         label="Подтверждение пароля", widget=forms.PasswordInput
@@ -24,7 +25,7 @@ class CustomUserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("email",)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")

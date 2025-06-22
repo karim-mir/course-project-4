@@ -16,8 +16,12 @@
 </ul>
 
 <a href="{% url 'newsletters:send_newsletter' object.pk %}">Запустить рассылку вручную</a>
-<a href="{% url 'newsletters:newsletters_edit' object.pk %}">Редактировать</a> |
-<a href="{% url 'newsletters:newsletters_delete' object.pk %}">Удалить</a> |
+{% if newsletter.author == request.user %}
+    <a href="{% url 'newsletters:newsletters_edit' newsletter.pk %}">Редактировать</a> |
+    <a href="{% url 'newsletters:newsletters_delete' newsletter.pk %}">Удалить</a>
+{% else %}
+    <span>Нет доступа</span>
+{% endif %}
 <a href="{% url 'newsletters:newsletters_list' %}">К списку рассылок</a>
 
 {% endblock %}

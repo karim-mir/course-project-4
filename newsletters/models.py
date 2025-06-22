@@ -1,5 +1,8 @@
+from django.conf import settings
+
 from django.db import models
 from django.utils import timezone
+
 from mailings.models import Mailing, MailingRecipient
 
 NEWSLETTERS_STATUS_CHOICES = [
@@ -8,17 +11,28 @@ NEWSLETTERS_STATUS_CHOICES = [
     ("Завершена", "Завершена"),
 ]
 
+
 class Newsletter(models.Model):
-    start_datetime = models.DateTimeField(verbose_name="Дата и время первой отправки",
-                                help_text="Введите дату и время первой отправки")
-    end_datetime = models.DateTimeField(verbose_name="Дата и время окончания отправки",
-                                help_text="Введите дату и время окончания отправки")
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="newsletters",
+        verbose_name="Автор"
+    )
+    start_datetime = models.DateTimeField(
+        verbose_name="Дата и время первой отправки",
+        help_text="Введите дату и время первой отправки",
+    )
+    end_datetime = models.DateTimeField(
+        verbose_name="Дата и время окончания отправки",
+        help_text="Введите дату и время окончания отправки",
+    )
     status = models.CharField(
         max_length=10,
         choices=NEWSLETTERS_STATUS_CHOICES,
         default="Создана",
         verbose_name="Статус",
-        help_text="Выберите статус рассылки"
+        help_text="Выберите статус рассылки",
     )
     message = models.ForeignKey(Mailing, on_delete=models.CASCADE)
     recipient = models.ManyToManyField(MailingRecipient)
@@ -28,7 +42,7 @@ class Newsletter(models.Model):
         verbose_name_plural = "Рассылки"
 
     def __str__(self):
-        return (f"Статус:{self.status}, сообщение:{self.message.title}")
+        return f"Статус:{self.status}, сообщение:{self.message.title}"
 
 
 class MailingAttempt(models.Model):
@@ -37,7 +51,9 @@ class MailingAttempt(models.Model):
         ("failure", "Не успешно"),
     ]
 
-    mailing = models.ForeignKey("Newsletter", on_delete=models.CASCADE, related_name="attempts")
+    mailing = models.ForeignKey(
+        "Newsletter", on_delete=models.CASCADE, related_name="attempts"
+    )
     attempt_time = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES_MAILINGS)
     server_response = models.TextField(blank=True)

@@ -1,0 +1,21 @@
+{% extends "users/home.html" %}
+
+{% block content %}
+<h1>Статистика по получателям рассылок</h1>
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Всего сообщений</th>
+        <th>Успешных</th>
+        <th>Неудачных</th>
+    </tr>
+    {% for recipient in recipients_stats %}
+    <tr>
+        <td>{{ recipient.email }}</td>
+        <td>{{ recipient.total_messages }}</td>
+        <td>{{ recipient.success_count }}</td>
+        <td>{{ recipient.failed_count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

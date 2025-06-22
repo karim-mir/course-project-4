@@ -1,15 +1,21 @@
+import os
+
 from django.core.mail import send_mail
-from .models import Mailing, MessageLog
+from dotenv import load_dotenv
+
 from mailings.models import MailingRecipient
 
-from dotenv import load_dotenv
-import os
+from .models import Mailing, MessageLog
 
 load_dotenv()
 
+
 def send_mailing(mailing_id):
-    """ Функция, которая проходит по выбранной рассылке и отправляет письма каждому получателю, логируя результат """
+    """Функция, которая проходит по выбранной рассылке и отправляет письма каждому получателю, логируя результат"""
     mailing = Mailing.objects.get(id=mailing_id)
+    if not mailing.is_active:
+        return
+
     recipients = MailingRecipient.objects.all()  # или фильтр по нужной группе
     for recipient in recipients:
         try:
@@ -23,8 +29,4 @@ def send_mailing(mailing_id):
         except Exception:
             status = "failed"
         # Логируем результат
-        MessageLog.objects.create(
-            mailing=mailing,
-            recipient=recipient,
-            status=status
-        )
+        MessageLog.objects.create(mailing=mailing, recipient=recipient, status=status)

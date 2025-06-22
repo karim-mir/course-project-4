@@ -1,12 +1,19 @@
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.views import LoginView, LogoutView
+
 from django.urls import path, reverse_lazy
 
 from users.apps import UsersConfig
+
 from . import views
-from .views import (MailingRecipientCreateView, MailingRecipientDeleteView,
-                    MailingRecipientDetailView, MailingRecipientListView,
-                    MailingRecipientUpdateView, confirm_email)
+from .views import (
+    MailingRecipientCreateView,
+    MailingRecipientDeleteView,
+    MailingRecipientDetailView,
+    MailingRecipientListView,
+    MailingRecipientUpdateView,
+    confirm_email,
+    recipients_stats_view,
+)
 
 app_name = UsersConfig.name
 urlpatterns = [
@@ -15,7 +22,9 @@ urlpatterns = [
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
     path("profile/", views.user_profile, name="profile"),
-    path("registration_pending/", views.registration_pending, name="registration_pending"),
+    path(
+        "registration_pending/", views.registration_pending, name="registration_pending"
+    ),
     # Получатели рассылки
     path("recipients/", MailingRecipientListView.as_view(), name="recipients_list"),
     path(
@@ -34,6 +43,7 @@ urlpatterns = [
         MailingRecipientDeleteView.as_view(),
         name="recipient_delete",
     ),
+    path("recipients/stats/", recipients_stats_view, name="recipients_stats"),
     # подтверждение email
     path("confirm/<uuid:token>/", confirm_email, name="confirm_email"),
     # восстановление пароля
@@ -65,28 +75,40 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-
     # Форма запроса сброса пароля (ввод email)
-    path("password_reset/", auth_views.PasswordResetView.as_view(
-        template_name="users/password_reset_form.html",
-        email_template_name="users/password_reset_email.html",
-        subject_template_name="users/password_reset_subject.txt",
-        success_url=reverse_lazy("users:password_reset_done")
-    ), name="password_reset"),
-
+    path(
+        "password_reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="users/password_reset_form.html",
+            email_template_name="users/password_reset_email.html",
+            subject_template_name="users/password_reset_subject.txt",
+            success_url=reverse_lazy("users:password_reset_done"),
+        ),
+        name="password_reset",
+    ),
     # Страница с сообщением, что письмо отправлено
-    path("password_reset/done/", auth_views.PasswordResetDoneView.as_view(
-        template_name="users/password_reset_done.html"
-    ), name="password_reset_done"),
-
+    path(
+        "password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="users/password_reset_done.html"
+        ),
+        name="password_reset_done",
+    ),
     # Ссылка из письма — форма для ввода нового пароля
-    path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(
-        template_name="users/password_reset_confirm.html",
-        success_url=reverse_lazy("users:password_reset_complete")
-    ), name="password_reset_confirm"),
-
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="users/password_reset_confirm.html",
+            success_url=reverse_lazy("users:password_reset_complete"),
+        ),
+        name="password_reset_confirm",
+    ),
     # Страница успешного сброса пароля
-    path("reset/done/", auth_views.PasswordResetCompleteView.as_view(
-        template_name="users/password_reset_complete.html"
-    ), name="password_reset_complete"),
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="users/password_reset_complete.html"
+        ),
+        name="password_reset_complete",
+    ),
 ]
