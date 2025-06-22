@@ -21,10 +21,10 @@
                     <div class="mt-auto d-flex justify-content-between">
                         <!-- Кнопки редактирования и удаления -->
                         {% if perms.users.change_mailingrecipient or user == request.user %}
-                        <a class="btn btn-primary btn-sm" href="{% url 'users:recipient_edit' user.pk %}">Редактировать</a>
+                        <a class="btn btn-primary btn-sm" href="{% url 'mailings:recipient_edit' user.pk %}">Редактировать</a>
                         {% endif %}
                         {% if perms.users.delete_mailingrecipient or user == request.user %}
-                        <a class="btn btn-danger btn-sm" href="{% url 'users:recipient_delete' user.pk %}">Удалить</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'mailings:recipient_delete' user.pk %}">Удалить</a>
                         {% endif %}
                     </div>
                 </div>
@@ -40,7 +40,7 @@
     <!-- Кнопка добавления нового получателя -->
     {% if perms.users.add_mailingrecipient or request.user.is_authenticated %}
     <div class="fixed-bottom d-flex justify-content-center mb-3">
-        <a class="btn btn-primary btn-lg shadow" href="{% url 'users:recipient_add' %}">Добавить получателя</a>
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailings:recipient_add' %}">Добавить получателя</a>
     </div>
     {% endif %}
 </div>

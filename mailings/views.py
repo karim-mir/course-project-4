@@ -7,9 +7,22 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
-from mailings.models import Mailing
+from mailings.forms import MailingRecipientForm
+from mailings.models import Mailing, MailingRecipient
 from mailings.utils import send_mailing
 from newsletters.models import Newsletter
+
+from django.db.models import Count, Q
+
+# Получение статистики по пользователю
+@login_required
+def recipients_stats_view(request):
+    recipients_stats = MailingRecipient.objects.annotate(
+        total_messages=Count("messages_sent"),
+        success_count=Count("messages_sent", filter=Q(messages_sent__status="success")),
+        failed_count=Count("messages_sent", filter=Q(messages_sent__status="failed"))
+    )
+    return render(request, "mailings/recipients_stats.html", {"recipients_stats": recipients_stats})
 
 
 class MailingAccessMixin:
@@ -87,3 +100,37 @@ class MailingDeleteView(LoginRequiredMixin, MailingAccessMixin, MailingOwnerPerm
     model = Mailing
     template_name = "mailings/mailings_confirm_delete.html"
     success_url = reverse_lazy("mailings:mailings_list")
+
+
+class MailingRecipientListView(LoginRequiredMixin, ListView):
+    model = MailingRecipient
+    template_name = "mailings/recipients_list.html"
+    context_object_name = "recipients"
+
+
+class MailingRecipientDetailView(LoginRequiredMixin, DetailView):
+    model = MailingRecipient
+    template_name = "mailings/recipients_detail.html"
+
+    def get_queryset(self):
+        return get_users_from_cache()
+
+
+class MailingRecipientCreateView(LoginRequiredMixin, CreateView):
+    model = MailingRecipient
+    template_name = "mailings/recipients_form.html"
+    form_class = MailingRecipientForm
+    success_url = reverse_lazy("mailings:recipients_list")
+
+
+class MailingRecipientUpdateView(LoginRequiredMixin, UpdateView):
+    model = MailingRecipient
+    template_name = "mailings/recipients_form.html"
+    form_class = MailingRecipientForm
+    success_url = reverse_lazy("mailings:recipients_list")
+
+
+class MailingRecipientDeleteView(LoginRequiredMixin, DeleteView):
+    model = MailingRecipient
+    template_name = "mailings/recipients_confirm_delete.html"
+    success_url = reverse_lazy("mailings:recipients_list")

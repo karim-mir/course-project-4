@@ -6,13 +6,7 @@ from users.apps import UsersConfig
 
 from . import views
 from .views import (
-    MailingRecipientCreateView,
-    MailingRecipientDeleteView,
-    MailingRecipientDetailView,
-    MailingRecipientListView,
-    MailingRecipientUpdateView,
     confirm_email,
-    recipients_stats_view,
 )
 
 app_name = UsersConfig.name
@@ -22,28 +16,7 @@ urlpatterns = [
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
     path("profile/", views.user_profile, name="profile"),
-    path(
-        "registration_pending/", views.registration_pending, name="registration_pending"
-    ),
-    # Получатели рассылки
-    path("recipients/", MailingRecipientListView.as_view(), name="recipients_list"),
-    path(
-        "recipients/<int:pk>/",
-        MailingRecipientDetailView.as_view(),
-        name="recipient_detail",
-    ),
-    path("recipients/add/", MailingRecipientCreateView.as_view(), name="recipient_add"),
-    path(
-        "recipients/<int:pk>/edit/",
-        MailingRecipientUpdateView.as_view(),
-        name="recipient_edit",
-    ),
-    path(
-        "recipients/<int:pk>/delete/",
-        MailingRecipientDeleteView.as_view(),
-        name="recipient_delete",
-    ),
-    path("recipients/stats/", recipients_stats_view, name="recipients_stats"),
+    path("registration_pending/", views.registration_pending, name="registration_pending"),
     # подтверждение email
     path("confirm/<uuid:token>/", confirm_email, name="confirm_email"),
     # восстановление пароля

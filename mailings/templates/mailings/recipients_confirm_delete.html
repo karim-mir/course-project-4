@@ -15,7 +15,7 @@
     <form method="post" style="margin-top: 20px;">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Удалить</button>
-        <a href="{% url 'users:recipients_list' %}" class="btn btn-secondary">Отмена</a>
+        <a href="{% url 'mailings:recipients_list' %}" class="btn btn-secondary">Отмена</a>
     </form>
 </div>
 {% endblock %}

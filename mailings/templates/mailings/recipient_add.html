@@ -8,7 +8,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Сохранить</button>
-        <a href="{% url 'users:recipients_list' %}" class="btn btn-secondary">Отмена</a>
+        <a href="{% url 'mailings:recipients_list' %}" class="btn btn-secondary">Отмена</a>
     </form>
 </div>
 {% endblock %}
