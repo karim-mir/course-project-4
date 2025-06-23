@@ -1,6 +1,6 @@
 {% extends "users/home.html" %}
 
-{% block content %}
+{% block base_content %}
 <h1>{{ object.title }}</h1>
 <p>{{ object.content }}</p>
 
@@ -10,8 +10,10 @@
     | <a href="{% url 'mailings:mailings_edit' object.pk %}">Редактировать</a>
     | <a href="{% url 'mailings:mailings_delete' object.pk %}">Удалить</a>
     | <a href="{% url 'mailings:start_mailing' object.pk %}">Запустить рассылку</a>
-{% if perms.mailings.can_disable_mailing %}
-    | <a href="{% url 'mailings:disable_mailing' object.pk %}">Отключить рассылку</a>
+
+    {% if perms.mailings.can_disable_mailing %}
+        | <a href="{% url 'mailings:disable_mailing' object.pk %}">Отключить рассылку</a>
+    {% endif %}
 {% endif %}
 
 {% endblock %}

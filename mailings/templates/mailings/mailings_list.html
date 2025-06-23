@@ -1,9 +1,16 @@
 {% extends "users/home.html" %}
 
-{% block content %}
+{% block base_content %}
 <h1>Список сообщений</h1>
-<a href="{% url 'mailings:mailings_add' %}">Добавить сообщение</a>
-<table>
+
+<p>Пользователь: {{ request.user.username }}</p>
+<p>Аутентифицирован: {{ request.user.is_authenticated }}</p>
+
+{% if request.user.is_authenticated %}
+    <a href="{% url 'mailings:mailings_add' %}" class="btn btn-primary mb-3">Добавить сообщение</a>
+{% endif %}
+
+<table class="table">
     <thead>
     <tr>
         <th>Заголовок</th>
@@ -11,20 +18,20 @@
     </tr>
     </thead>
     <tbody>
-    {% for message in messages %}
+    {% for message in mailings %}
     <tr>
         <td>{{ message.title }}</td>
         <td>
             <a href="{% url 'mailings:mailings_detail' message.pk %}">Просмотр</a>
             {% if message.owner == request.user %}
-            | <a href="{% url 'mailings:mailings_edit' message.pk %}">Редактировать</a>
-            | <a href="{% url 'mailings:mailings_delete' message.pk %}">Удалить</a>
+                | <a href="{% url 'mailings:mailings_edit' message.pk %}">Редактировать</a>
+                | <a href="{% url 'mailings:mailings_delete' message.pk %}">Удалить</a>
             {% endif %}
         </td>
     </tr>
     {% empty %}
     <tr>
-        <td colspan="3">Нет сообщений</td>
+        <td colspan="2">Нет сообщений</td>
     </tr>
     {% endfor %}
     </tbody>

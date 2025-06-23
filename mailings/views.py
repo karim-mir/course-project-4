@@ -107,30 +107,43 @@ class MailingRecipientListView(LoginRequiredMixin, ListView):
     template_name = "mailings/recipients_list.html"
     context_object_name = "recipients"
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == "manager":
+            return MailingRecipient.objects.all()
+        return MailingRecipient.objects.filter(owner=user)
 
-class MailingRecipientDetailView(LoginRequiredMixin, DetailView):
+
+class MailingRecipientDetailView(LoginRequiredMixin, MailingOwnerPermissionMixin, DetailView):
     model = MailingRecipient
     template_name = "mailings/recipients_detail.html"
 
     def get_queryset(self):
-        return get_users_from_cache()
+        user = self.request.user
+        if user.role == "manager":
+            return MailingRecipient.objects.all()
+        return MailingRecipient.objects.filter(owner=user)
 
 
 class MailingRecipientCreateView(LoginRequiredMixin, CreateView):
     model = MailingRecipient
-    template_name = "mailings/recipients_form.html"
     form_class = MailingRecipientForm
+    template_name = "mailings/recipients_form.html"
     success_url = reverse_lazy("mailings:recipients_list")
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # назначаем владельца
+        return super().form_valid(form)
 
-class MailingRecipientUpdateView(LoginRequiredMixin, UpdateView):
+
+class MailingRecipientUpdateView(LoginRequiredMixin, MailingOwnerPermissionMixin, UpdateView):
     model = MailingRecipient
     template_name = "mailings/recipients_form.html"
     form_class = MailingRecipientForm
     success_url = reverse_lazy("mailings:recipients_list")
 
 
-class MailingRecipientDeleteView(LoginRequiredMixin, DeleteView):
+class MailingRecipientDeleteView(LoginRequiredMixin, MailingOwnerPermissionMixin, DeleteView):
     model = MailingRecipient
     template_name = "mailings/recipients_confirm_delete.html"
     success_url = reverse_lazy("mailings:recipients_list")
