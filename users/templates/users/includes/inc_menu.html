@@ -1,0 +1,26 @@
+<nav class="nav-sidebar d-flex flex-column" style="height: 100vh;">
+    <div class="menu-title">
+        <i class="fas fa-bars"></i> Меню
+    </div>
+    <div class="nav flex-column">
+        <a class="nav-link active" href="{% url 'users:home' %}">Главная</a>
+        <a class="nav-link" href="{% url 'mailings:recipients_list' %}">Получатели</a>
+        <a class="nav-link" href="{% url 'mailings:mailings_list' %}">Сообщения</a>
+    </div>
+    <div class="dropdown mt-auto">
+        <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Пользователь
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="{% url 'users:profile' %}">Профиль</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'users:logout' %}">Выход</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Подключение стилей и скриптов -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

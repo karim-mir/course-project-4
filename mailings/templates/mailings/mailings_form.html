@@ -1,0 +1,20 @@
+{% extends "users/home.html" %}
+
+{% block base_content %}
+<h1>
+    {% if object %}
+    Редактировать сообщение
+    {% else %}
+    Добавить сообщение
+    {% endif %}
+</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+
+<a href="{% url 'mailings:mailings_list' %}">К списку сообщений</a>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'users/home.html' %}
+{% load my_tags %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h1>Профиль пользователя</h1>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>ФИО:</strong> {{ user.full_name|default:"-" }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+        <li class="list-group-item"><strong>Комментарий:</strong> {{ user.comment|default:"-" }}</li>
+        {% if user.token %}
+        <li class="list-group-item"><strong>Token:</strong> {{ user.token }}</li>
+        {% endif %}
+    </ul>
+    <div class="mt-3">
+        <a href="{% url 'users:profile_edit' user.pk %}" class="btn btn-primary">Редактировать профиль</a>
+        <a href="{% url 'users:logout' %}" class="btn btn-danger">Выйти</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "users/home.html" %}
+
+{% block content %}
+<h1>Подтверждение удаления</h1>
+
+<p>Вы уверены, что хотите удалить рассылку "{{ object }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+    <a href="{% url 'newsletters:newsletters_list' %}">Отмена</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+<h1>Статистика рассылки: {{ mailing }}</h1>
+
+<ul>
+    <li>Общее число попыток: {{ total_attempts }}</li>
+    <li>Успешных отправлений: {{ success_count }}</li>
+    <li>Неуспешных отправлений: {{ failure_count }}</li>
+</ul>
+
+<h2>Детали ошибок</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Время попытки</th>
+            <th>Статус</th>
+            <th>Ответ сервера</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>{{ attempt.attempt_time }}</td>
+            <td>{{ attempt.get_status_display }}</td>
+            <td>{{ attempt.server_response }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">Нет данных</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'newsletters:newsletters_detail' mailing.pk %}">Вернуться к деталям рассылки</a>
